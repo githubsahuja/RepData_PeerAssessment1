@@ -1,7 +1,12 @@
 # Reproducible Research: Peer Assessment 1
 
 
+This report has been generated as part of Project 1 for the Course 5 - Reproducible Research.
+
 ## Loading and preprocessing the data
+
+The dataset for this project can be downloaded from the url provided. The following code looks for the csv file in the working directory. If the file is found it loads the csv into a data-frame and if the file is not found it downloads the data from the web, unzips and then loads the csv into a data-frame. As part of reading the data we also specify the classes of the columns this makes it easier for later processing. 
+
 
 ```r
 #Check whether file exists in the working directory
@@ -19,6 +24,10 @@ dfActivity <- read.csv("./activity.csv", header=TRUE, na.strings = "NA",
 ```
 
 ## What is mean total number of steps taken per day?
+
+This part of the assignment calls for calculating the total number of steps. For this step it has been asked to ignore the NAs. We calculate the total steps by applying the "sum" function over the complete dataset using the tapply base method. 
+
+We then utilize the hist function from the base plotting package to draw a histogram of frequency of steps taken per day. We also calculate the mean and median of the steps and report it. Also to make these mean and median values very obvious we plot these on the histogram that was just created. We utilize abline methodto add the lines (vertical) for the mean and median to overlay on top of the histogram. 
 
 
 ```r
@@ -65,6 +74,10 @@ legend('topright', legend=c("mean", "median"), col=c("red", "blue"), lty=6:3, ce
 
 ## What is the average daily activity pattern?
 
+On the same dataset that we read in we average daily pattern by utilizing the aggregate method and function "mean". We use the ggplot method from ggplot2 package to draw a time series plot to show the activity pattern. 
+
+Also we calculate the time interval with maximum average number of steps.
+
 
 ```r
 #Calculate the avg. daily pattern - use the aggregate function from base R
@@ -96,6 +109,10 @@ dfAvgDailyPattern[which.max(dfAvgDailyPattern$averagesteps), c("interval")]
 ```
 
 ## Imputing missing values
+
+For this part of the assignment, we can no longer ignore NAs, so we are imputing. First we report the number of NAs in our dataset. To impute the NAs we utilize transform method and populate the NA values with the mean of number of steps. We calculate the number of NAs again to confirm all the NAs are removed. With this imputed data-frame we again calculate the total steps by applying the "sum" function over the complete dataset using the tapply base method. 
+
+We then utilize the hist function from the base plotting package to draw a histogram of frequency of steps taken per day. We also calculate the mean and median of the steps and report it. Also to make these mean and median values very obvious we plot these on the histogram that was just created. We utilize abline methodto add the lines (vertical) for the mean and median to overlay on top of the histogram. 
 
 
 ```r
@@ -172,6 +189,10 @@ legend('topright', legend=c("mean", "median"), col=c("red", "blue"), lty=6:3, ce
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+To check on differences in activity patterns between weekdays and weekends - we first process the dataset and add a new column day and populate it with value "weekday" or "weekend" based on the Date column. 
+
+We then utilize the xyplot menthod from lattice package to plot the panels as provided in the sample. From the two plots we can easily see that there are differences - for a weekday there is less activity as people might be at work and doing their day jobs (possibly sitting) compared to a weekend. 
 
 
 ```r

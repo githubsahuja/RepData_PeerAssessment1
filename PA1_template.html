@@ -120,8 +120,10 @@ $(document).ready(function () {
 </div>
 
 
+<p>This report has been generated as part of Project 1 for the Course 5 - Reproducible Research.</p>
 <div id="loading-and-preprocessing-the-data" class="section level2">
 <h2>Loading and preprocessing the data</h2>
+<p>The dataset for this project can be downloaded from the url provided. The following code looks for the csv file in the working directory. If the file is found it loads the csv into a data-frame and if the file is not found it downloads the data from the web, unzips and then loads the csv into a data-frame. As part of reading the data we also specify the classes of the columns this makes it easier for later processing.</p>
 <pre class="r"><code>#Check whether file exists in the working directory
 if (!file.exists(&quot;activity.csv&quot;) )
     {
@@ -137,6 +139,8 @@ dfActivity &lt;- read.csv(&quot;./activity.csv&quot;, header=TRUE, na.strings = 
 </div>
 <div id="what-is-mean-total-number-of-steps-taken-per-day" class="section level2">
 <h2>What is mean total number of steps taken per day?</h2>
+<p>This part of the assignment calls for calculating the total number of steps. For this step it has been asked to ignore the NAs. We calculate the total steps by applying the “sum” function over the complete dataset using the tapply base method.</p>
+<p>We then utilize the hist function from the base plotting package to draw a histogram of frequency of steps taken per day. We also calculate the mean and median of the steps and report it. Also to make these mean and median values very obvious we plot these on the histogram that was just created. We utilize abline methodto add the lines (vertical) for the mean and median to overlay on top of the histogram.</p>
 <pre class="r"><code>#Ignoring NA's for this part of the assignment
 #calculate the total steps
 totalSteps &lt;- with(dfActivity, tapply(steps, date, sum, na.rm=TRUE))
@@ -166,6 +170,8 @@ legend('topright', legend=c(&quot;mean&quot;, &quot;median&quot;), col=c(&quot;r
 </div>
 <div id="what-is-the-average-daily-activity-pattern" class="section level2">
 <h2>What is the average daily activity pattern?</h2>
+<p>On the same dataset that we read in we average daily pattern by utilizing the aggregate method and function “mean”. We use the ggplot method from ggplot2 package to draw a time series plot to show the activity pattern.</p>
+<p>Also we calculate the time interval with maximum average number of steps.</p>
 <pre class="r"><code>#Calculate the avg. daily pattern - use the aggregate function from base R
 dfAvgDailyPattern &lt;- with (dfActivity, aggregate(steps, by=list(interval), FUN=mean, na.rm=TRUE))
 #Update the column names for the data frame generated
@@ -188,6 +194,8 @@ dfAvgDailyPattern[which.max(dfAvgDailyPattern$averagesteps), c(&quot;interval&qu
 </div>
 <div id="imputing-missing-values" class="section level2">
 <h2>Imputing missing values</h2>
+<p>For this part of the assignment, we can no longer ignore NAs, so we are imputing. First we report the number of NAs in our dataset. To impute the NAs we utilize transform method and populate the NA values with the mean of number of steps. We calculate the number of NAs again to confirm all the NAs are removed. With this imputed data-frame we again calculate the total steps by applying the “sum” function over the complete dataset using the tapply base method.</p>
+<p>We then utilize the hist function from the base plotting package to draw a histogram of frequency of steps taken per day. We also calculate the mean and median of the steps and report it. Also to make these mean and median values very obvious we plot these on the histogram that was just created. We utilize abline methodto add the lines (vertical) for the mean and median to overlay on top of the histogram.</p>
 <pre class="r"><code>#Calculate and report the total number of missing values in the dataset 
 #(i.e. the total number of rows with NAs)
 sum(is.na(dfActivity$steps))</code></pre>
@@ -232,6 +240,8 @@ legend('topright', legend=c(&quot;mean&quot;, &quot;median&quot;), col=c(&quot;r
 </div>
 <div id="are-there-differences-in-activity-patterns-between-weekdays-and-weekends" class="section level2">
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>
+<p>To check on differences in activity patterns between weekdays and weekends - we first process the dataset and add a new column day and populate it with value “weekday” or “weekend” based on the Date column.</p>
+<p>We then utilize the xyplot menthod from lattice package to plot the panels as provided in the sample. From the two plots we can easily see that there are differences - for a weekday there is less activity as people might be at work and doing their day jobs (possibly sitting) compared to a weekend.</p>
 <pre class="r"><code>#Add a new column day and default to &quot;weekday&quot;
 dfActivityImputed$day &lt;- &quot;weekday&quot;
 #Go over the dates and for those falling over the weekend - mark them as weekend
